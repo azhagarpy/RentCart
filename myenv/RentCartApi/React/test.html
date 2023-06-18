@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Product Images</title>
+</head>
+
+<body>
+    <h1>Product Images</h1>
+
+    <form id="imageForm" enctype="multipart/form-data">
+        <!-- Include the product ID as a hidden input field -->
+        <input type="text" name="product" id="productId" value="2" />
+
+        <input type="file" name="image1" accept="image/*" />
+        <input type="file" name="image2" accept="image/*" />
+        <input type="file" name="image3" accept="image/*" />
+        <input type="file" name="image4" accept="image/*" />
+        <input type="file" name="image5" accept="image/*" />
+        <input type="file" name="image6" accept="image/*" />
+        <input type="file" name="image7" accept="image/*" />
+        <input type="file" name="image8" accept="image/*" />
+
+        <button type="submit">Upload Images</button>
+    </form>
+
+    <div id="imageList">
+        <!-- Product images will be displayed here -->
+    </div>
+
+    <script>
+        // Get the product ID from the hidden input field
+        const productId = document.getElementById('productId').value;
+
+        // Function to handle form submission
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('imageForm');
+            const formData = new FormData(form);
+
+            // Append the product ID to the form data
+            formData.append('product', productId);
+
+            fetch('http://127.0.0.1:8000/product-images/', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Images uploaded successfully!', data);
+                    // Optionally, you can update the imageList DOM element with the new images
+                })
+                .catch(error => {
+                    console.error('Error uploading images:', error);
+                });
+        }
+
+        // Add event listener to the form submission
+        const imageForm = document.getElementById('imageForm');
+        imageForm.addEventListener('submit', handleFormSubmit);
+
+        // Function to fetch and display the product images
+        function fetchProductImages() {
+            fetch('http://127.0.0.1:8000/product-images/')
+                .then(response => response.json())
+                .then(data => {
+                    const imageList = document.getElementById('imageList');
+                    imageList.innerHTML = '';
+
+                    // Iterate over the product images and create HTML elements to display them
+                })
+        }
